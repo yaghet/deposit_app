@@ -59,7 +59,7 @@ async def test_invalid_body(async_client, test_wallet):
         response.status_code == 422
     ), f"Expected 422 Unprocessable Entity, but got {response.status_code}"
     data = response.json()
-    assert "detail" in data, f"Response messing detail field"
+    assert "detail" in data, "Response messing detail field"
 
 
 @pytest.mark.asyncio
@@ -71,4 +71,4 @@ async def test_reduce_balance_to_minus(async_client, test_wallet):
         response.status_code == 400
     ), f"Expected 400 Bad request, but got {response.status_code}"
     detail = response.json().get("detail")
-    assert detail == "Insufficient funds", f"Detail must be Insufficient funds"
+    assert detail == "Insufficient funds", "Detail must be Insufficient funds"

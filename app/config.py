@@ -8,9 +8,9 @@ PATH_ENV = os.path.join(BASE_DIR, ".env")
 
 class Settings(BaseSettings):
     # TODO: Change to production values
-    DB_NAME: str = 'balances'
-    DB_USER: str = 'admin'
-    DB_PASSWORD: str = 'admin'
+    DB_NAME: str = "balances"
+    DB_USER: str = "admin"
+    DB_PASSWORD: str = "admin"
     DB_PORT: int = 5432
     DB_HOST: str = "localhost"
 

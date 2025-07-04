@@ -14,7 +14,7 @@ class WalletResponse(BaseModel):
 
 
 class BaseModelWallet(BaseModel):
-    model_config = {'extra': 'forbid'}
+    model_config = {"extra": "forbid"}
     amount: condecimal(gt=0, max_digits=12, decimal_places=2)
 
 
