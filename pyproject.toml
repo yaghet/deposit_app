@@ -1,0 +1,25 @@
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+ asyncio_default_fixture_loop_scope='session'
+asyncio_default_test_loop_scope='session'
+[project]
+name = "deposit"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "alembic>=1.16.2",
+    "asyncpg>=0.30.0",
+    "black>=25.1.0",
+    "fastapi>=0.115.14",
+    "greenlet>=3.2.3",
+    "httpx>=0.28.1",
+    "isort>=6.0.1",
+    "psycopg2-binary>=2.9.10",
+    "pydantic-settings>=2.10.1",
+    "pytest>=8.4.1",
+    "pytest-asyncio>=1.0.0",
+    "sqlalchemy>=2.0.41",
+    "uvicorn>=0.35.0",
+]
