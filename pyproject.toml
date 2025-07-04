@@ -10,6 +10,7 @@ dependencies = [
     "fastapi>=0.115.14",
     "greenlet>=3.2.3",
     "httpx>=0.28.1",
+    "mypy>=1.16.1",
     "psycopg2-binary>=2.9.10",
     "pydantic-settings>=2.10.1",
     "pytest>=8.4.1",
@@ -21,6 +22,7 @@ dependencies = [
 
 [tool.ruff]
 exclude = [
+    "alembic",
     ".bzr",
     ".direnv",
     ".eggs",
