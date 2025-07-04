@@ -13,7 +13,6 @@ router = APIRouter(
 )
 
 WalletID = Annotated[str, Path(title="Wallet ID")]
-Session: AsyncSession = Depends(get_session)
 
 
 @router.post(
@@ -23,24 +22,24 @@ Session: AsyncSession = Depends(get_session)
     description="Create a new wallet with an initial balance.",
 )
 async def create_wallet(
-    wallet_create: Annotated[
-        WalletCreateModel,
-        Body(
-            examples={
-                "normal": {
-                    "summary": "Normal example",
-                    "description": "Create wallet with initial amount",
-                    "value": {"amount": 100.00},
+        wallet_create: Annotated[
+            WalletCreateModel,
+            Body(
+                examples={
+                    "normal": {
+                        "summary": "Normal example",
+                        "description": "Create wallet with initial amount",
+                        "value": {"amount": 100.00},
+                    },
+                    "invalid": {
+                        "summary": "Invalid example",
+                        "description": "Negative amount is invalid",
+                        "value": {"amount": -10.00},
+                    },
                 },
-                "invalid": {
-                    "summary": "Invalid example",
-                    "description": "Negative amount is invalid",
-                    "value": {"amount": -10.00},
-                },
-            },
-        ),
-    ],
-    session: AsyncSession = Depends(get_session),
+            ),
+        ],
+        session: AsyncSession = Depends(get_session),
 ):
     """Create a new wallet with a specified initial amount"""
 
@@ -56,25 +55,25 @@ async def create_wallet(
     description="Deposit or withdraw an amount from the wallet.",
 )
 async def create_deposit(
-    wallet_id: WalletID,
-    operation: Annotated[
-        OperationModel,
-        Body(
-            examples={
-                "deposit": {
-                    "summary": "Deposit example",
-                    "description": "Deposit 50.00 to wallet",
-                    "value": {"operation_type": "DEPOSIT", "amount": 50.00},
+        wallet_id: WalletID,
+        operation: Annotated[
+            OperationModel,
+            Body(
+                examples={
+                    "deposit": {
+                        "summary": "Deposit example",
+                        "description": "Deposit 50.00 to wallet",
+                        "value": {"operation_type": "DEPOSIT", "amount": 50.00},
+                    },
+                    "withdraw": {
+                        "summary": "Withdraw example",
+                        "description": "Withdraw 20.00 from wallet",
+                        "value": {"operation_type": "WITHDRAW", "amount": 20.00},
+                    },
                 },
-                "withdraw": {
-                    "summary": "Withdraw example",
-                    "description": "Withdraw 20.00 from wallet",
-                    "value": {"operation_type": "WITHDRAW", "amount": 20.00},
-                },
-            },
-        ),
-    ],
-    session: AsyncSession = Depends(get_session),
+            ),
+        ],
+        session: AsyncSession = Depends(get_session),
 ):
     """Performs a deposit or withdrawal operation on the specified wallet."""
     service = WalletService(session)
@@ -90,8 +89,8 @@ async def create_deposit(
     description="Retrieve the current balance of the specified wallet by uuid.",
 )
 async def get_balance_by_uuid(
-    wallet_id: WalletID,
-    session: AsyncSession = Depends(get_session),
+        wallet_id: WalletID,
+        session: AsyncSession = Depends(get_session),
 ):
     """Returns the current balance for the wallet identified by `wallet_id`."""
     service = WalletService(session)
