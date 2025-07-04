@@ -1,5 +1,4 @@
 import uuid
-from typing import Dict
 
 from fastapi import HTTPException
 from sqlalchemy import select
@@ -15,7 +14,7 @@ from app.services.strategies.withdraw import WithDrawStrategy
 class WalletService:
     def __init__(self, session: AsyncSession) -> None:
         self.session = session
-        self._strategies: Dict[str, OperationStrategyAbstract] = {
+        self._strategies: dict[str, OperationStrategyAbstract] = {
             "DEPOSIT": DepositStrategy(),
             "WITHDRAW": WithDrawStrategy(),
         }
