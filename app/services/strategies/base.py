@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from abc import ABC, abstractmethod
 
 from app.db.models import Wallet
@@ -11,7 +13,7 @@ class OperationStrategyAbstract(ABC):
     specific operations involving a Wallet and an amount.
     """
     @abstractmethod
-    def execute(self, wallet: Wallet, amount: float):
+    def execute(self, wallet: Wallet, amount: Decimal) -> None:
         """
         Execute the operation on the given wallet with the specified amount.
         Args:

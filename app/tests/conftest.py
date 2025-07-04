@@ -1,3 +1,4 @@
+from typing import AsyncGenerator
 from uuid import uuid4
 
 import pytest
@@ -9,14 +10,14 @@ from app.db.session import AsyncSessionLocal
 
 
 @pytest.fixture(scope="session")
-async def async_client():
+async def async_client() -> AsyncGenerator[AsyncClient]:
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://testserver") as client:
         yield client
 
 
 @pytest.fixture(scope="session")
-async def test_wallet():
+async def test_wallet() -> AsyncGenerator[Wallet]:
     async with AsyncSessionLocal() as session:
         wallet = Wallet(uuid=str(uuid4()), balance=0)
         session.add(wallet)

@@ -21,13 +21,13 @@ class Wallet(Base):
 
     balance: Mapped[Decimal] = mapped_column(Numeric(12, 2), default=0)
 
-    def deposit(self, amount: float):
+    def deposit(self, amount: Decimal) -> None:
         self.balance += amount
 
-    def withdraw(self, amount: float):
+    def withdraw(self, amount: Decimal) -> None:
         if self.balance < amount:
             raise ValueError("Insufficient funds")
         self.balance -= amount
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'<Wallet(uuid="{self.uuid}", balance="{self.balance}")>'

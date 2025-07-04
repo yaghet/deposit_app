@@ -40,7 +40,7 @@ async def create_wallet(
             ),
         ],
         session: AsyncSession = Depends(get_session),
-):
+) -> WalletResponse:
     """Create a new wallet with a specified initial amount"""
 
     service = WalletService(session)
@@ -74,7 +74,7 @@ async def create_deposit(
             ),
         ],
         session: AsyncSession = Depends(get_session),
-):
+) -> WalletResponse:
     """Performs a deposit or withdrawal operation on the specified wallet."""
     service = WalletService(session)
     wallet = await service.perform_wallet(wallet_id, operation)
@@ -91,7 +91,7 @@ async def create_deposit(
 async def get_balance_by_uuid(
         wallet_id: WalletID,
         session: AsyncSession = Depends(get_session),
-):
+) -> WalletResponse:
     """Returns the current balance for the wallet identified by `wallet_id`."""
     service = WalletService(session)
     wallet = await service.get_wallet(wallet_id)

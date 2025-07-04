@@ -3,6 +3,7 @@ from typing import Union
 
 import pytest
 from httpx import AsyncClient, Response
+from app.db.models import Wallet
 
 TEST_OPERATION_DATA = {"amount": 100.00, "operation_type": "DEPOSIT"}
 
@@ -10,7 +11,7 @@ TEST_OPERATION_DATA = {"amount": 100.00, "operation_type": "DEPOSIT"}
 async def post_operation(
     async_client: AsyncClient,
     wallet_uuid: str,
-    json_data: dict[str, Union[Decimal, str]],
+    json_data: dict[str, object | Union[Decimal, str]],
 ) -> Response:
     return await async_client.post(
         f"/api/v1/wallets/{wallet_uuid}/operation",
@@ -19,7 +20,7 @@ async def post_operation(
 
 
 @pytest.mark.asyncio
-async def test_create_deposit_success(async_client: AsyncClient, test_wallet):
+async def test_create_deposit_success(async_client: AsyncClient, test_wallet: Wallet) -> None:
     response = await post_operation(async_client, test_wallet.uuid, TEST_OPERATION_DATA)
 
     assert (
@@ -32,7 +33,7 @@ async def test_create_deposit_success(async_client: AsyncClient, test_wallet):
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize("invalid_uuid", ["invalid-uuid", "1111", ""])
-async def test_invalid_uuid(async_client, invalid_uuid):
+async def test_invalid_uuid(async_client: AsyncClient, invalid_uuid: str) -> None:
     response = await post_operation(async_client, invalid_uuid, TEST_OPERATION_DATA)
 
     assert (
@@ -46,10 +47,10 @@ async def test_invalid_uuid(async_client, invalid_uuid):
 
 
 @pytest.mark.asyncio
-async def test_invalid_body(async_client, test_wallet):
+async def test_invalid_body(async_client: AsyncClient, test_wallet: Wallet) -> None:
     invalid_operation_body = {
         "No_exist_field": 100,
-        "invalid_field_name_price": 100.00,
+        "invalid_field_name_price": "100.0",
     }
     response = await post_operation(
         async_client, test_wallet.uuid, invalid_operation_body
@@ -63,7 +64,7 @@ async def test_invalid_body(async_client, test_wallet):
 
 
 @pytest.mark.asyncio
-async def test_reduce_balance_to_minus(async_client, test_wallet):
+async def test_reduce_balance_to_minus(async_client: AsyncClient, test_wallet: Wallet) -> None:
     test_data = {"amount": 1000.00, "operation_type": "WITHDRAW"}
     response = await post_operation(async_client, test_wallet.uuid, json_data=test_data)
 

@@ -5,7 +5,7 @@ from sqlalchemy import pool
 
 from alembic import context
 from app.db.models import Base
-
+joi = 'fdopfd[psdspfoop[d[opfd[ops[pfodsofsd[pfods[fpdof[dsfpods[odpsf[ods[pfodo[fofdso[fdso[pfdso[pfodps[o[pfdsop[fdospfdso[fdop[fds[fds[opfod[s[ofpds'
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
