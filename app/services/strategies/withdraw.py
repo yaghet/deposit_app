@@ -15,5 +15,5 @@ class WithDrawStrategy(OperationStrategyAbstract):
             amount (float): The amount involved in the operation.
         """
         if amount < 1:
-            raise ValueError('Amount must be greater than zero')
+            raise ValueError("Amount must be greater than zero")
         wallet.withdraw(amount=amount)

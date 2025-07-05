@@ -48,7 +48,7 @@ class WalletService:
         Returns:
             Wallet: Wallet object from the database
         """
-        logger.debug(f'Fetching wallet with ID {wallet_id}')
+        logger.debug(f"Fetching wallet with ID {wallet_id}")
         try:
             result = await self.session.execute(
                 select(Wallet)
@@ -57,12 +57,12 @@ class WalletService:
             )
             wallet = result.scalar_one_or_none()
             if not wallet:
-                logger.warning(f'Wallet with {wallet_id} not found')
+                logger.warning(f"Wallet with {wallet_id} not found")
                 raise WalletNotFoundException()
-            logger.debug(f'Wallet found {wallet_id}')
+            logger.debug(f"Wallet found {wallet_id}")
             return wallet
         except Exception as e:
-            logger.error(f'Error fetching wallet {wallet_id}: {e}')
+            logger.error(f"Error fetching wallet {wallet_id}: {e}")
             raise
 
     async def perform_wallet(self, wallet_id: str, operation: OperationModel) -> Wallet:
@@ -76,22 +76,22 @@ class WalletService:
             Wallet: Updated wallet object after the operation
         """
         logger.debug(
-            f'Forming operation {operation.operation_type.value} on wallet {wallet_id} with amount {operation.amount}')
+            f"Forming operation {operation.operation_type.value} on wallet {wallet_id} with amount {operation.amount}")
         try:
             async with self.session.begin():
                 wallet = await self.get_wallet(wallet_id=wallet_id)
                 strategy = self._strategies.get(operation.operation_type.value)
 
                 if not strategy:
-                    logger.error(f'Invalid operation type {operation.operation_type.value}')
+                    logger.error(f"Invalid operation type {operation.operation_type.value}")
                     raise InvalidOperationException()
 
                 try:
                     strategy.execute(wallet, operation.amount)
                     logger.info(
-                        f'Operation {operation.operation_type.value} executed successfully on wallet {wallet_id}')
+                        f"Operation {operation.operation_type.value} executed successfully on wallet {wallet_id}")
                 except ValueError as exp:
-                    logger.error(f'Operation execution failed {str(exp)}')
+                    logger.error(f"Operation execution failed {str(exp)}")
                     raise OperationExecutionException(detail=str(exp))
 
                 self.session.add(wallet)
@@ -102,12 +102,12 @@ class WalletService:
 
         except IntegrityError as exp:
             await self.session.rollback()
-            logger.error(f'Integrity error during executing operation {exp.orig}')
-            raise HTTPException(status_code=400, detail='Data integrity violation')
+            logger.error(f"Integrity error during executing operation {exp.orig}")
+            raise HTTPException(status_code=400, detail="Data integrity violation")
         except Exception as exp:
             await self.session.rollback()
-            logger.error(f'Unexpected error during wallet operation {exp}')
-            raise HTTPException(status_code=500, detail='Internal Server Error')
+            logger.error(f"Unexpected error during wallet operation {exp}")
+            raise HTTPException(status_code=500, detail="Internal Server Error")
 
     async def create_wallet(self, amount: Decimal) -> Wallet:
         """
@@ -120,7 +120,7 @@ class WalletService:
         """
         wallet_uuid = str(uuid.uuid4())
         new_wallet = Wallet(uuid=wallet_uuid, balance=amount)
-        logger.info(f'Creating a new wallet with ID {wallet_uuid} and initial balance {amount}')
+        logger.info(f"Creating a new wallet with ID {wallet_uuid} and initial balance {amount}")
         try:
             self.session.add(new_wallet)
 
@@ -128,12 +128,12 @@ class WalletService:
             await self.session.refresh(new_wallet)
         except IntegrityError as exp:
             await self.session.rollback()
-            logger.error(f'Integrity error during executing operation {exp.orig}')
-            raise HTTPException(status_code=400, detail='Data integrity violation')
+            logger.error(f"Integrity error during executing operation {exp.orig}")
+            raise HTTPException(status_code=400, detail="Data integrity violation")
         except Exception as exp:
             await self.session.rollback()
-            logger.error(f'Unexpected error during wallet operation {exp}')
-            raise HTTPException(status_code=500, detail='Internal Server Error')
+            logger.error(f"Unexpected error during wallet operation {exp}")
+            raise HTTPException(status_code=500, detail="Internal Server Error")
 
-        logger.info(f'Wallet created successfully with ID {wallet_uuid}')
+        logger.info(f"Wallet created successfully with ID {wallet_uuid}")
         return new_wallet
