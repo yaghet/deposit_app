@@ -15,5 +15,15 @@ AsyncSessionLocal = async_sessionmaker(
 
 
 async def get_session() -> AsyncGenerator[AsyncSession, None]:
+    """
+    Async generator that yields a SQLAlchemy AsyncSession.
+
+    This function can be used as a dependency in FastAPI endpoints to provide
+    a database session that is automatically cleaned up after the request.
+
+    Yields:
+        AsyncSession: An asynchronous SQLAlchemy session.
+
+    """
     async with AsyncSessionLocal() as session:
         yield session
