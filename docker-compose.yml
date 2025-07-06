@@ -3,15 +3,15 @@ services:
     image: postgres:17-alpine
     container_name: postgres_db
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: balances
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
     ports:
-      - "5432:5432"
+      - "${DB_PORT}:5432"
     volumes:
       - ./pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: [ 'CMD-SHELL', 'pg_isready -U admin -d balances' ]
+      test: [ 'CMD-SHELL', 'pg_isready -U ${DB_USER} -d ${DB_NAME}' ]
       interval: 3s
       timeout: 5s
       retries: 5
@@ -22,13 +22,13 @@ services:
       postgres:
         condition: service_healthy
     ports:
-      - "8000:8000"
+      - "${APP_PORT}:8000"
     environment:
-      DB_NAME: balances
-      DB_USER: admin
-      DB_PASSWORD: admin
-      DB_HOST: postgres
-      DB_PORT: 5432
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_HOST: ${DB_NAME}
+      DB_PORT: ${DB_PORT}
     restart: always
 volumes:
   pgdata:
